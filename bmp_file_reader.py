@@ -26,13 +26,40 @@ import enum
 class BMPFileReader:
     def __init__(self, file_handle):
         self.file_handle = file_handle
+        self.__bmp_header = None
+        self.__dib_header = None
 
-    def read_file_header(self):
+    def read_bmp_file_header(self):
+        if self.__bmp_header is not None:
+            return self.__bmp_header
+
         self.file_handle.seek(0)
 
         header_bytes = self.file_handle.read(14)
 
-        return BMPHeader.from_bytes(header_bytes)
+        bmp_header = BMPHeader.from_bytes(header_bytes)
+        self.__bmp_header = bmp_header
+
+        return bmp_header
+
+    def read_dib_header(self):
+        if self.__dib_header is not None:
+            return self.__dib_header
+
+        self.file_handle.seek(14)
+
+        dib_header = DIBHeader.from_positioned_file_handler(self.file_handle)
+        self.__dib_header = dib_header
+
+        return dib_header
+
+    def get_width(self):
+        # TODO: read from header type
+        return self.read_dib_header()[0]
+
+    def get_height(self):
+        # TODO: read from header type
+        return self.read_dib_header()[1]
 
 
 class BMPHeader:
@@ -69,6 +96,20 @@ class BMPHeader:
         image_start_offset = int.from_bytes(bytes(header_bytes_list[10:14]), "little")
 
         return BMPHeader(bmp_type, size, value_1, value_2, image_start_offset)
+
+
+class DIBHeader:
+    @staticmethod
+    def from_positioned_file_handler(file_handler):
+        header_size = int.from_bytes(file_handler.read(4), "little")
+
+        header_bytes_list = list(bytearray(file_handler.read(header_size)))
+
+        width = int.from_bytes(bytes(header_bytes_list[0:4]), "little")
+        height = int.from_bytes(bytes(header_bytes_list[4:8]), "little")
+
+        # TODO: actually parse the whole header and return a proper DIB header type
+        return (width, height)
 
 
 class BMPType(enum.Enum):
