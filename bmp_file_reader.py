@@ -73,8 +73,27 @@ class BMPHeader:
 
 class BMPType(enum.Enum):
     BM = enum.auto()
+    BA = enum.auto()
+    CI = enum.auto()
+    CP = enum.auto()
+    IC = enum.auto()
+    PT = enum.auto()
 
     @staticmethod
     def from_bytes(bmp_type_bytes):
-        if bytes(bmp_type_bytes).decode() == "BM":
+        type_str = bytes(bmp_type_bytes).decode()
+
+        if type_str == "BM":
             return BMPType.BM
+        elif type_str == "BA":
+            return BMPType.BA
+        elif type_str == "CI":
+            return BMPType.CI
+        elif type_str == "CP":
+            return BMPType.CP
+        elif type_str == "IC":
+            return BMPType.IC
+        elif type_str == "PT":
+            return BMPType.PT
+        else:
+            raise ValueError(f'Invalid BMP type: "{type_str}"')
