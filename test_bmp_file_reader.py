@@ -43,3 +43,15 @@ class BMPFileReaderTest(unittest.TestCase):
 
         self.assertEqual(expected_width, actual_width)
         self.assertEqual(expected_height, actual_height)
+
+    def test_get_row(self):
+        image_path = "images/single_white_pixel.bmp"
+
+        with open(image_path, "rb") as file_handle:
+            reader = bmpr.BMPFileReader(file_handle)
+
+            actual = reader.get_row(0)
+
+        expected = [bmpr.Color(255, 255, 255)]
+
+        self.assertEqual(expected, actual)

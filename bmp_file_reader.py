@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import enum
+import math
 
 
 class BMPFileReader:
@@ -60,6 +61,61 @@ class BMPFileReader:
     def get_height(self):
         # TODO: read from header type
         return self.read_dib_header()[1]
+
+    def get_row(self, row):
+        PIXEL_SIZE = 3
+
+        height = self.get_height()
+        row_index = (height - row) - 1
+
+        # Rows are padded out to 4 byte alignment
+        row_size = int(math.ceil((PIXEL_SIZE * self.get_width()) / 4.0) * 4)
+        print(row_size)
+
+        row_start = (
+            self.read_bmp_file_header().image_start_offset + row_size * row_index
+        )
+
+        self.file_handle.seek(row_start)
+
+        row_bytes = list(bytearray(self.file_handle.read(row_size)))
+
+        pixels = []
+        i = 0
+        while i < self.get_width():
+            pixels.append(Color.from_bytes(row_bytes[i : i + 3]))
+
+            i += 1
+
+        return pixels
+
+
+class Color:
+    def __init__(self, red, green, blue):
+        self.red = red
+        self.green = green
+        self.blue = blue
+
+    def __repr__(self):
+        return f"Color(red={self.red}, green={self.green}, blue={self.blue})"
+
+    def __eq__(self, other):
+        if not isinstance(other, Color):
+            return False
+
+        return (
+            self.red == other.red
+            and self.green == other.green
+            and self.blue == other.blue
+        )
+
+    @staticmethod
+    def from_bytes(color_bytes):
+        blue = color_bytes[0]
+        green = color_bytes[1]
+        red = color_bytes[2]
+
+        return Color(red, green, blue)
 
 
 class BMPHeader:
