@@ -66,11 +66,12 @@ class BMPFileReader:
         PIXEL_SIZE = 3
 
         height = self.get_height()
+        assert row < height
+
         row_index = (height - row) - 1
 
         # Rows are padded out to 4 byte alignment
         row_size = int(math.ceil((PIXEL_SIZE * self.get_width()) / 4.0) * 4)
-        print(row_size)
 
         row_start = (
             self.read_bmp_file_header().image_start_offset + row_size * row_index
@@ -83,7 +84,10 @@ class BMPFileReader:
         pixels = []
         i = 0
         while i < self.get_width():
-            pixels.append(Color.from_bytes(row_bytes[i : i + 3]))
+            start = i * 3
+            end = (i + 1) * 3
+
+            pixels.append(Color.from_bytes(row_bytes[start:end]))
 
             i += 1
 
