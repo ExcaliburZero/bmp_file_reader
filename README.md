@@ -16,3 +16,8 @@ with open("my_image.bmp", "rb") as file_handle:
         for col_i, color in enumerate(row):
             print(col_i, row_i, color.red, color.green, color.blue)
 ```
+
+## Supported BMP files
+This library only supports BMP files that use 24-bit color values. In order to generate BMP image files that meet this requirement, I recommend using the GIMP image editor to export a BMP file with the following advanced option:
+
+![Screenshot showing GIMP's BMP export window with the "Advanced Options" dialog enabled and the 24-bits R8 G8 B8 radio button selected.](images/GIMP_bmp_options.png)
