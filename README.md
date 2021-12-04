@@ -1,5 +1,5 @@
 # BMP file reader [![CI](https://github.com/ExcaliburZero/bmp_file_reader/actions/workflows/main.yml/badge.svg)](https://github.com/ExcaliburZero/bmp_file_reader/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/ExcaliburZero/bmp_file_reader/branch/master/graph/badge.svg?token=XIBXDW2Y7M)](https://codecov.io/gh/ExcaliburZero/bmp_file_reader)
-This is a MicroPython one-file library for reading BMP files (ex. for Raspberry Pi Pico). Specifically it focuses on being able to read BMP files without requiring too much RAM.
+This is a MicroPython one-file library for reading/parsing BMP files (ex. for Raspberry Pi Pico). Specifically it focuses on being able to read BMP files without requiring too much RAM.
 
 ## Usage
 ### Raspberry Pi Pico
