@@ -3,7 +3,7 @@ This is a MicroPython one-file library for reading/parsing BMP files (ex. for Ra
 
 ## Usage
 ### Raspberry Pi Pico
-First you will need to download [`bmp_file_reader.py`](https://raw.githubusercontent.com/ExcaliburZero/bmp_file_reader/master/bmp_file_reader.py) and place it into the `lib` folder on your Raspberry Pi Pico (if that file does not exist, then you will need to create it).
+First you will need to download [`bmp_file_reader.py`](https://raw.githubusercontent.com/ExcaliburZero/bmp_file_reader/master/bmp_file_reader.py) and place it into the `lib` folder on your Raspberry Pi Pico (if that folder does not exist, then you will need to create it).
 
 You will then be able to leverage the `bmp_file_reader` library via import statements:
 
