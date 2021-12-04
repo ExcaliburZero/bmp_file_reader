@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import enum
 import math
 
 
@@ -172,13 +171,14 @@ class DIBHeader:
         return (width, height)
 
 
-class BMPType(enum.Enum):
-    BM = enum.auto()
-    BA = enum.auto()
-    CI = enum.auto()
-    CP = enum.auto()
-    IC = enum.auto()
-    PT = enum.auto()
+# Note: Can't use enum here, since MicroPython doesn't currently have an enum standard library
+class BMPType:
+    BM = 0
+    BA = 1
+    CI = 2
+    CP = 3
+    IC = 4
+    PT = 5
 
     @staticmethod
     def from_bytes(bmp_type_bytes):
