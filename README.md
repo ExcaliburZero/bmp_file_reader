@@ -8,6 +8,8 @@ First you will need to download [`bmp_file_reader.py`](https://raw.githubusercon
 You will then be able to leverage the `bmp_file_reader` library via import statements:
 
 ```python
+import bmp_file_reader as bmpr
+
 with open("my_image.bmp", "rb") as file_handle:
     reader = bmpr.BMPFileReader(file_handle)
     
