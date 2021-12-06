@@ -30,6 +30,7 @@ class BMPFileReaderTest(unittest.TestCase):
             num_color_planes=1,
             bits_per_pixel=24,
             compression_type=bmpr.CompressionType.BI_RGB,
+            raw_bitmap_size=4,
         )
 
         self.assertEqual(expected, actual)
@@ -179,6 +180,7 @@ class DIBHeaderTest(unittest.TestCase):
             num_color_planes=1,
             bits_per_pixel=24,
             compression_type=bmpr.CompressionType.BI_RGB,
+            raw_bitmap_size=4,
         )
 
         actual = repr(header)
@@ -189,6 +191,7 @@ class DIBHeaderTest(unittest.TestCase):
     num_color_planes=1,
     bits_per_pixel=24,
     compression_type=BI_RGB,
+    raw_bitmap_size=4,
 )"""
 
         self.assertEquals(expected, actual)
