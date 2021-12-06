@@ -183,6 +183,7 @@ class DIBHeader:
         horizontal_resolution_ppm,
         vertical_resolution_ppm,
         num_colors_in_palette,
+        num_important_colors_used,
     ):
         self.width = width
         self.height = height
@@ -193,6 +194,7 @@ class DIBHeader:
         self.horizontal_resolution_ppm = horizontal_resolution_ppm
         self.vertical_resolution_ppm = vertical_resolution_ppm
         self.num_colors_in_palette = num_colors_in_palette
+        self.num_important_colors_used = num_important_colors_used
 
     def __eq__(self, other):
         if not isinstance(other, DIBHeader):
@@ -208,6 +210,7 @@ class DIBHeader:
             and self.horizontal_resolution_ppm == other.horizontal_resolution_ppm
             and self.vertical_resolution_ppm == other.vertical_resolution_ppm
             and self.num_colors_in_palette == other.num_colors_in_palette
+            and self.num_important_colors_used == other.num_important_colors_used
         )
 
     def __repr__(self):
@@ -221,6 +224,7 @@ class DIBHeader:
     horizontal_resolution_ppm={self.horizontal_resolution_ppm},
     vertical_resolution_ppm={self.vertical_resolution_ppm},
     num_colors_in_palette={self.num_colors_in_palette},
+    num_important_colors_used={self.num_important_colors_used},
 )"""
 
     @staticmethod
@@ -240,6 +244,7 @@ class DIBHeader:
         horizontal_resolution_ppm = None
         vertical_resolution_ppm = None
         num_colors_in_palette = None
+        num_important_colors_used = None
 
         if header_size >= 40:
             num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
@@ -255,6 +260,9 @@ class DIBHeader:
             num_colors_in_palette = int.from_bytes(
                 bytes(header_bytes_list[28:32]), "little"
             )
+            num_important_colors_used = int.from_bytes(
+                bytes(header_bytes_list[32:36]), "little"
+            )
 
         return DIBHeader(
             width=width,
@@ -266,6 +274,7 @@ class DIBHeader:
             horizontal_resolution_ppm=horizontal_resolution_ppm,
             vertical_resolution_ppm=vertical_resolution_ppm,
             num_colors_in_palette=num_colors_in_palette,
+            num_important_colors_used=num_important_colors_used,
         )
 
 
