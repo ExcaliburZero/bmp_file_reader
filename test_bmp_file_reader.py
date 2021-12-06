@@ -153,3 +153,15 @@ class BMPFileReaderTest(unittest.TestCase):
 
             expected_msg = "This parser does not currently support BMP files with 16 bits per pixel. Currently only 24-bit color values are supported."
             self.assertEquals(expected_msg, str(context.exception))
+
+    def test_get_row_16bit_colors(self):
+        image_path = "images/32_bit_colors.bmp"
+
+        with open(image_path, "rb") as file_handle:
+            reader = bmpr.BMPFileReader(file_handle)
+
+            with self.assertRaises(ValueError) as context:
+                reader.get_row(0)
+
+            expected_msg = "This parser does not currently support BMP files with 32 bits per pixel. Currently only 24-bit color values are supported."
+            self.assertEquals(expected_msg, str(context.exception))
