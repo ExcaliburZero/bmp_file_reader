@@ -169,3 +169,26 @@ class BMPFileReaderTest(unittest.TestCase):
 
             expected_msg = "This parser does not currently support BMP files with 32 bits per pixel. Currently only 24-bit color values are supported."
             self.assertEquals(expected_msg, str(context.exception))
+
+
+class DIBHeaderTest(unittest.TestCase):
+    def test_repr_simple(self):
+        header = bmpr.DIBHeader(
+            width=1,
+            height=1,
+            num_color_planes=1,
+            bits_per_pixel=24,
+            compression_type=bmpr.CompressionType.BI_RGB,
+        )
+
+        actual = repr(header)
+
+        expected = """DIBHeader(
+    width=1,
+    height=1,
+    num_color_planes=1,
+    bits_per_pixel=24,
+    compression_type=BI_RGB,
+)"""
+
+        self.assertEquals(expected, actual)

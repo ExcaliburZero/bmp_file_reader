@@ -193,6 +193,15 @@ class DIBHeader:
             and self.compression_type == other.compression_type
         )
 
+    def __repr__(self):
+        return f"""DIBHeader(
+    width={self.width},
+    height={self.height},
+    num_color_planes={self.num_color_planes},
+    bits_per_pixel={self.bits_per_pixel},
+    compression_type={CompressionType.to_str(self.compression_type)},
+)"""
+
     @staticmethod
     def from_positioned_file_handler(file_handler):
         header_size = int.from_bytes(file_handler.read(4), "little")
@@ -261,6 +270,23 @@ class CompressionType:
     BI_CMYK = 11
     BI_CMYKRLE8 = 12
     BI_CMYKRLE4 = 13
+
+    STRINGS_DICT = {
+        0: "BI_RGB",
+        1: "BI_RLE8",
+        2: "BI_REL4",
+        3: "BI_BITFIELDS",
+        4: "BI_JPEG",
+        5: "BI_PNG",
+        6: "BI_ALPHABITFIELDS",
+        11: "BI_CMYK",
+        12: "BI_CMYKRLE8",
+        13: "BI_CMYKRLE4",
+    }
+
+    @staticmethod
+    def to_str(compression_type):
+        return CompressionType.STRINGS_DICT.get(compression_type, str(compression_type))
 
     @staticmethod
     def is_compressed(compression_type):
