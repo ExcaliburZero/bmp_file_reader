@@ -229,14 +229,15 @@ class DIBHeader:
 
     @staticmethod
     def from_positioned_file_handler(file_handler):
+        # Based on info from:
+        # https://en.wikipedia.org/wiki/BMP_file_format#DIB_header_(bitmap_information_header)
+
         header_size = int.from_bytes(file_handler.read(4), "little")
 
         header_bytes_list = list(bytearray(file_handler.read(header_size - 4)))
 
-        width = int.from_bytes(bytes(header_bytes_list[0:4]), "little")
-        height = int.from_bytes(bytes(header_bytes_list[4:8]), "little")
-
-        # TODO: parse the rest of the header parts
+        width = None
+        height = None
         num_color_planes = None
         bits_per_pixel = None
         compression_type = None
@@ -246,7 +247,10 @@ class DIBHeader:
         num_colors_in_palette = None
         num_important_colors_used = None
 
-        if header_size >= 40:
+        # BITMAPINFOHEADER or higher version
+        if header_size in [40, 52, 56, 108, 124] or header_size > 124:
+            width = int.from_bytes(bytes(header_bytes_list[0:4]), "little")
+            height = int.from_bytes(bytes(header_bytes_list[4:8]), "little")
             num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
             bits_per_pixel = int.from_bytes(bytes(header_bytes_list[10:12]), "little")
             compression_type = int.from_bytes(bytes(header_bytes_list[12:16]), "little")
@@ -262,6 +266,12 @@ class DIBHeader:
             )
             num_important_colors_used = int.from_bytes(
                 bytes(header_bytes_list[32:36]), "little"
+            )
+        else:
+            # Note: Might add some support for older headers in the future, but I don't know how to
+            # generate BMP files with them, so maybe not.
+            raise ValueError(
+                "BMP file looks like it might be using an old BMP DIB header that we do not support."
             )
 
         return DIBHeader(
