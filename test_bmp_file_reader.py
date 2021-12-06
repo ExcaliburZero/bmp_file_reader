@@ -33,6 +33,7 @@ class BMPFileReaderTest(unittest.TestCase):
             raw_bitmap_size=4,
             horizontal_resolution_ppm=11811,
             vertical_resolution_ppm=11811,
+            num_colors_in_palette=0,
         )
 
         self.assertEqual(expected, actual)
@@ -185,6 +186,7 @@ class DIBHeaderTest(unittest.TestCase):
             raw_bitmap_size=4,
             horizontal_resolution_ppm=11811,
             vertical_resolution_ppm=11811,
+            num_colors_in_palette=0,
         )
 
         actual = repr(header)
@@ -198,6 +200,7 @@ class DIBHeaderTest(unittest.TestCase):
     raw_bitmap_size=4,
     horizontal_resolution_ppm=11811,
     vertical_resolution_ppm=11811,
+    num_colors_in_palette=0,
 )"""
 
         self.assertEquals(expected, actual)

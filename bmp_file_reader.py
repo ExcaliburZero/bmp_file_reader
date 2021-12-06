@@ -182,6 +182,7 @@ class DIBHeader:
         raw_bitmap_size,
         horizontal_resolution_ppm,
         vertical_resolution_ppm,
+        num_colors_in_palette,
     ):
         self.width = width
         self.height = height
@@ -191,6 +192,7 @@ class DIBHeader:
         self.raw_bitmap_size = raw_bitmap_size
         self.horizontal_resolution_ppm = horizontal_resolution_ppm
         self.vertical_resolution_ppm = vertical_resolution_ppm
+        self.num_colors_in_palette = num_colors_in_palette
 
     def __eq__(self, other):
         if not isinstance(other, DIBHeader):
@@ -205,6 +207,7 @@ class DIBHeader:
             and self.raw_bitmap_size == other.raw_bitmap_size
             and self.horizontal_resolution_ppm == other.horizontal_resolution_ppm
             and self.vertical_resolution_ppm == other.vertical_resolution_ppm
+            and self.num_colors_in_palette == other.num_colors_in_palette
         )
 
     def __repr__(self):
@@ -217,6 +220,7 @@ class DIBHeader:
     raw_bitmap_size={self.raw_bitmap_size},
     horizontal_resolution_ppm={self.horizontal_resolution_ppm},
     vertical_resolution_ppm={self.vertical_resolution_ppm},
+    num_colors_in_palette={self.num_colors_in_palette},
 )"""
 
     @staticmethod
@@ -235,6 +239,7 @@ class DIBHeader:
         raw_bitmap_size = None
         horizontal_resolution_ppm = None
         vertical_resolution_ppm = None
+        num_colors_in_palette = None
 
         if header_size >= 40:
             num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
@@ -245,7 +250,10 @@ class DIBHeader:
                 bytes(header_bytes_list[20:24]), "little"
             )
             vertical_resolution_ppm = int.from_bytes(
-                bytes(header_bytes_list[20:24]), "little"
+                bytes(header_bytes_list[24:28]), "little"
+            )
+            num_colors_in_palette = int.from_bytes(
+                bytes(header_bytes_list[28:32]), "little"
             )
 
         return DIBHeader(
@@ -257,6 +265,7 @@ class DIBHeader:
             raw_bitmap_size=raw_bitmap_size,
             horizontal_resolution_ppm=horizontal_resolution_ppm,
             vertical_resolution_ppm=vertical_resolution_ppm,
+            num_colors_in_palette=num_colors_in_palette,
         )
 
 
