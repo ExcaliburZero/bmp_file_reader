@@ -54,12 +54,10 @@ class BMPFileReader:
         return dib_header
 
     def get_width(self):
-        # TODO: read from header type
-        return self.read_dib_header()[0]
+        return self.read_dib_header().width
 
     def get_height(self):
-        # TODO: read from header type
-        return self.read_dib_header()[1]
+        return self.read_dib_header().height
 
     def get_row(self, row):
         PIXEL_SIZE = 3
@@ -158,6 +156,16 @@ class BMPHeader:
 
 
 class DIBHeader:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def __eq__(self, other):
+        if not isinstance(other, DIBHeader):
+            return False
+
+        return self.width == other.width and self.height == other.height
+
     @staticmethod
     def from_positioned_file_handler(file_handler):
         header_size = int.from_bytes(file_handler.read(4), "little")
@@ -167,8 +175,9 @@ class DIBHeader:
         width = int.from_bytes(bytes(header_bytes_list[0:4]), "little")
         height = int.from_bytes(bytes(header_bytes_list[4:8]), "little")
 
-        # TODO: actually parse the whole header and return a proper DIB header type
-        return (width, height)
+        # TODO: parse the rest of the header parts
+
+        return DIBHeader(width, height)
 
 
 # Note: Can't use enum here, since MicroPython doesn't currently have an enum standard library
