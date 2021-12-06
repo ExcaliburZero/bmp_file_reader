@@ -60,7 +60,13 @@ class BMPFileReader:
         return self.read_dib_header().height
 
     def get_row(self, row):
-        PIXEL_SIZE = 3
+        PIXEL_SIZE_BYTES = 3
+
+        bits_per_pixel = self.read_dib_header().bits_per_pixel
+        if bits_per_pixel != 24:
+            raise ValueError(
+                f"This parser does not currently support BMP files with {bits_per_pixel} bits per pixel. Currently only 24-bit color values are supported."
+            )
 
         height = self.get_height()
         assert row < height
@@ -68,7 +74,7 @@ class BMPFileReader:
         row_index = (height - row) - 1
 
         # Rows are padded out to 4 byte alignment
-        row_size = int(math.ceil((PIXEL_SIZE * self.get_width()) / 4.0) * 4)
+        row_size = int(math.ceil((PIXEL_SIZE_BYTES * self.get_width()) / 4.0) * 4)
 
         row_start = (
             self.read_bmp_file_header().image_start_offset + row_size * row_index
