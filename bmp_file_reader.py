@@ -62,12 +62,20 @@ class BMPFileReader:
     def get_row(self, row):
         PIXEL_SIZE_BYTES = 3
 
+        # Check the file info to make sure we support it
         bits_per_pixel = self.read_dib_header().bits_per_pixel
         if bits_per_pixel != 24:
             raise ValueError(
                 f"This parser does not currently support BMP files with {bits_per_pixel} bits per pixel. Currently only 24-bit color values are supported."
             )
 
+        compression_type = self.read_dib_header().compression_type
+        if compression_type != CompressionType.BI_RGB:
+            raise ValueError(
+                f"This parser does not currently support compressed BMP files."
+            )
+
+        # Prepare to start parsing the row
         height = self.get_height()
         assert row < height
 
@@ -80,10 +88,12 @@ class BMPFileReader:
             self.read_bmp_file_header().image_start_offset + row_size * row_index
         )
 
+        # Read in the row information from the file
         self.file_handle.seek(row_start)
 
         row_bytes = list(bytearray(self.file_handle.read(row_size)))
 
+        # Parse the pixel color information for the row
         pixels = []
         i = 0
         while i < self.get_width():
