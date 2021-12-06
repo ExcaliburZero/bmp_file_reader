@@ -162,11 +162,14 @@ class BMPHeader:
 
 
 class DIBHeader:
-    def __init__(self, width, height, num_color_planes, bits_per_pixel):
+    def __init__(
+        self, width, height, num_color_planes, bits_per_pixel, compression_type
+    ):
         self.width = width
         self.height = height
         self.num_color_planes = num_color_planes
         self.bits_per_pixel = bits_per_pixel
+        self.compression_type = compression_type
 
     def __eq__(self, other):
         if not isinstance(other, DIBHeader):
@@ -177,6 +180,7 @@ class DIBHeader:
             and self.height == other.height
             and self.num_color_planes == other.num_color_planes
             and self.bits_per_pixel == other.bits_per_pixel
+            and self.compression_type == other.compression_type
         )
 
     @staticmethod
@@ -191,16 +195,19 @@ class DIBHeader:
         # TODO: parse the rest of the header parts
         num_color_planes = None
         bits_per_pixel = None
+        compression_type = None
 
         if header_size >= 40:
             num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
             bits_per_pixel = int.from_bytes(bytes(header_bytes_list[10:12]), "little")
+            compression_type = int.from_bytes(bytes(header_bytes_list[12:14]), "little")
 
         return DIBHeader(
             width=width,
             height=height,
             num_color_planes=num_color_planes,
             bits_per_pixel=bits_per_pixel,
+            compression_type=compression_type,
         )
 
 
@@ -231,3 +238,20 @@ class BMPType:
             return BMPType.PT
         else:
             raise ValueError(f'Invalid BMP type: "{type_str}"')
+
+
+class CompressionType:
+    BI_RGB = 0
+    BI_RLE8 = 1
+    BI_REL4 = 2
+    BI_BITFIELDS = 3
+    BI_JPEG = 4
+    BI_PNG = 5
+    BI_ALPHABITFIELDS = 6
+    BI_CMYK = 11
+    BI_CMYKRLE8 = 12
+    BI_CMYKRLE4 = 13
+
+    @staticmethod
+    def is_compressed(compression_type):
+        return compression_type not in [CompressionType.BI_RGB, CompressionType.BI_CMYK]

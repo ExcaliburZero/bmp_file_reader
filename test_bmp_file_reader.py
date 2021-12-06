@@ -25,7 +25,11 @@ class BMPFileReaderTest(unittest.TestCase):
             actual = reader.read_dib_header()
 
         expected = bmpr.DIBHeader(
-            width=1, height=1, num_color_planes=1, bits_per_pixel=24
+            width=1,
+            height=1,
+            num_color_planes=1,
+            bits_per_pixel=24,
+            compression_type=bmpr.CompressionType.BI_RGB,
         )
 
         self.assertEqual(expected, actual)
