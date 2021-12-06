@@ -181,6 +181,7 @@ class DIBHeader:
         compression_type,
         raw_bitmap_size,
         horizontal_resolution_ppm,
+        vertical_resolution_ppm,
     ):
         self.width = width
         self.height = height
@@ -189,6 +190,7 @@ class DIBHeader:
         self.compression_type = compression_type
         self.raw_bitmap_size = raw_bitmap_size
         self.horizontal_resolution_ppm = horizontal_resolution_ppm
+        self.vertical_resolution_ppm = vertical_resolution_ppm
 
     def __eq__(self, other):
         if not isinstance(other, DIBHeader):
@@ -202,6 +204,7 @@ class DIBHeader:
             and self.compression_type == other.compression_type
             and self.raw_bitmap_size == other.raw_bitmap_size
             and self.horizontal_resolution_ppm == other.horizontal_resolution_ppm
+            and self.vertical_resolution_ppm == other.vertical_resolution_ppm
         )
 
     def __repr__(self):
@@ -213,6 +216,7 @@ class DIBHeader:
     compression_type={CompressionType.to_str(self.compression_type)},
     raw_bitmap_size={self.raw_bitmap_size},
     horizontal_resolution_ppm={self.horizontal_resolution_ppm},
+    vertical_resolution_ppm={self.vertical_resolution_ppm},
 )"""
 
     @staticmethod
@@ -230,6 +234,7 @@ class DIBHeader:
         compression_type = None
         raw_bitmap_size = None
         horizontal_resolution_ppm = None
+        vertical_resolution_ppm = None
 
         if header_size >= 40:
             num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
@@ -237,6 +242,9 @@ class DIBHeader:
             compression_type = int.from_bytes(bytes(header_bytes_list[12:16]), "little")
             raw_bitmap_size = int.from_bytes(bytes(header_bytes_list[16:20]), "little")
             horizontal_resolution_ppm = int.from_bytes(
+                bytes(header_bytes_list[20:24]), "little"
+            )
+            vertical_resolution_ppm = int.from_bytes(
                 bytes(header_bytes_list[20:24]), "little"
             )
 
@@ -248,6 +256,7 @@ class DIBHeader:
             compression_type=compression_type,
             raw_bitmap_size=raw_bitmap_size,
             horizontal_resolution_ppm=horizontal_resolution_ppm,
+            vertical_resolution_ppm=vertical_resolution_ppm,
         )
 
 

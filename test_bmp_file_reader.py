@@ -32,6 +32,7 @@ class BMPFileReaderTest(unittest.TestCase):
             compression_type=bmpr.CompressionType.BI_RGB,
             raw_bitmap_size=4,
             horizontal_resolution_ppm=11811,
+            vertical_resolution_ppm=11811,
         )
 
         self.assertEqual(expected, actual)
@@ -183,6 +184,7 @@ class DIBHeaderTest(unittest.TestCase):
             compression_type=bmpr.CompressionType.BI_RGB,
             raw_bitmap_size=4,
             horizontal_resolution_ppm=11811,
+            vertical_resolution_ppm=11811,
         )
 
         actual = repr(header)
@@ -195,6 +197,7 @@ class DIBHeaderTest(unittest.TestCase):
     compression_type=BI_RGB,
     raw_bitmap_size=4,
     horizontal_resolution_ppm=11811,
+    vertical_resolution_ppm=11811,
 )"""
 
         self.assertEquals(expected, actual)
