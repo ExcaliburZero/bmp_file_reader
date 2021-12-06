@@ -24,7 +24,7 @@ class BMPFileReaderTest(unittest.TestCase):
 
             actual = reader.read_dib_header()
 
-        expected = bmpr.DIBHeader(width=1, height=1)
+        expected = bmpr.DIBHeader(width=1, height=1, num_color_planes=1)
 
         self.assertEqual(expected, actual)
 

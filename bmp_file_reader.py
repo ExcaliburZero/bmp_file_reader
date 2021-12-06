@@ -156,28 +156,37 @@ class BMPHeader:
 
 
 class DIBHeader:
-    def __init__(self, width, height):
+    def __init__(self, width, height, num_color_planes):
         self.width = width
         self.height = height
+        self.num_color_planes = num_color_planes
 
     def __eq__(self, other):
         if not isinstance(other, DIBHeader):
             return False
 
-        return self.width == other.width and self.height == other.height
+        return (
+            self.width == other.width
+            and self.height == other.height
+            and self.num_color_planes == other.num_color_planes
+        )
 
     @staticmethod
     def from_positioned_file_handler(file_handler):
         header_size = int.from_bytes(file_handler.read(4), "little")
 
-        header_bytes_list = list(bytearray(file_handler.read(header_size)))
+        header_bytes_list = list(bytearray(file_handler.read(header_size - 4)))
 
         width = int.from_bytes(bytes(header_bytes_list[0:4]), "little")
         height = int.from_bytes(bytes(header_bytes_list[4:8]), "little")
 
         # TODO: parse the rest of the header parts
+        num_color_planes = None
 
-        return DIBHeader(width, height)
+        if header_size >= 18:
+            num_color_planes = int.from_bytes(bytes(header_bytes_list[8:10]), "little")
+
+        return DIBHeader(width=width, height=height, num_color_planes=num_color_planes)
 
 
 # Note: Can't use enum here, since MicroPython doesn't currently have an enum standard library
