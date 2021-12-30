@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import array
 import math
 
 
@@ -59,9 +60,7 @@ class BMPFileReader:
     def get_height(self):
         return self.read_dib_header().height
 
-    def get_row(self, row):
-        PIXEL_SIZE_BYTES = 3
-
+    def __assert_can_read(self):
         # Check the file info to make sure we support it
         bits_per_pixel = self.read_dib_header().bits_per_pixel
         if bits_per_pixel != 24:
@@ -75,15 +74,55 @@ class BMPFileReader:
                 f"This parser does not currently support compressed BMP files."
             )
 
+    def __get_row_size_bytes(self):
+        PIXEL_SIZE_BYTES = 3
+
+        # Rows are padded out to 4 byte alignment
+        return int(math.ceil((PIXEL_SIZE_BYTES * self.get_width()) / 4.0) * 4)
+
+    def iter_pixels_by_row(self):
+        self.__assert_can_read()
+
+        row_size = self.__get_row_size_bytes()
+        read_size = row_size * self.get_height()
+
+        # Read in the row information from the file
+        self.file_handle.seek(self.read_bmp_file_header().image_start_offset)
+
+        image_bytes = self.file_handle.read(read_size)
+
+        # Parse the pixel color information
+        i = 0
+        while i < self.get_height():
+            row_index = (self.get_height() - i) - 1
+
+            row = []
+            j = 0
+            while j < self.get_width():
+                start = j * 3 + row_index * row_size
+                end = (j + 1) * 3 + row_index * row_size
+
+                row.append(Color.from_bytes(image_bytes[start:end]))
+
+                j += 1
+
+            yield row
+
+            i += 1
+
+    def get_row(self, row):
+        PIXEL_SIZE_BYTES = 3
+
+        self.__assert_can_read()
+
         # Prepare to start parsing the row
         height = self.get_height()
         assert row < height
 
         row_index = (height - row) - 1
 
-        # Rows are padded out to 4 byte alignment
-        row_size = int(math.ceil((PIXEL_SIZE_BYTES * self.get_width()) / 4.0) * 4)
-
+        # Parse the row
+        row_size = self.__get_row_size_bytes()
         row_start = (
             self.read_bmp_file_header().image_start_offset + row_size * row_index
         )
@@ -91,7 +130,7 @@ class BMPFileReader:
         # Read in the row information from the file
         self.file_handle.seek(row_start)
 
-        row_bytes = list(bytearray(self.file_handle.read(row_size)))
+        row_bytes = self.file_handle.read(row_size)
 
         # Parse the pixel color information for the row
         pixels = []
