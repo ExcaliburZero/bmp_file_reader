@@ -35,6 +35,7 @@ class BMPFileReader:
         The file handle must have been opened in read binary mode ("rb").
 
         :param file_handle: The file handle of the BMP image to read.
+        :type file_handle: io.TextIOWrapper
         """
         self.file_handle = file_handle
         self.__bmp_header = None
@@ -151,7 +152,21 @@ class BMPFileReader:
 
 
 class Color:
+    """
+    A 24bit RGB color value.
+    """
+
     def __init__(self, red, green, blue):
+        """
+        Creates a Color from the given 1 byte red, green, and blue color values.
+
+        :param red: The 1 byte red value.
+        :type red: int
+        :param green: The 1 byte green value.
+        :type green: int
+        :param blue: The 1 byte blue value.
+        :type blue: int
+        """
         self.red = red
         self.green = green
         self.blue = blue
