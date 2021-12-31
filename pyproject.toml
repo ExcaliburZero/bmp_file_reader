@@ -1,0 +1,4 @@
+[project]
+name = "bmp_file_reader"
+authors = [{name = "ExcaliburZero", email = "cwellsny@gmail.com"}]
+dynamic = ["version", "description"]
