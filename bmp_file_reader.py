@@ -54,9 +54,21 @@ class BMPFileReader:
         return dib_header
 
     def get_width(self):
+        """
+        Returns the width of the image (in pixels).
+
+        :return: Width of the image in pixels.
+        :rtype: int
+        """
         return self.read_dib_header().width
 
     def get_height(self):
+        """
+        Returns the height of the image (in pixels).
+
+        :return: Height of the image in pixels.
+        :rtype: int
+        """
         return self.read_dib_header().height
 
     def get_row(self, row):
