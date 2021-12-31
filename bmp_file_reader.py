@@ -24,12 +24,29 @@ import math
 
 
 class BMPFileReader:
+    """
+    An object for reading a BMP image file.
+    """
+
     def __init__(self, file_handle):
+        """
+        Creates a BMPFileReader from the given file handle.
+
+        The file handle must have been opened in read binary mode ("rb").
+
+        :param file_handle: The file handle of the BMP image to read.
+        """
         self.file_handle = file_handle
         self.__bmp_header = None
         self.__dib_header = None
 
     def read_bmp_file_header(self):
+        """
+        Returns the BMP file header of the image.
+
+        :return: BMP file header of the image.
+        :rtype: BMPHeader
+        """
         if self.__bmp_header is not None:
             return self.__bmp_header
 
@@ -43,6 +60,12 @@ class BMPFileReader:
         return bmp_header
 
     def read_dib_header(self):
+        """
+        Returns the DIB header of the BMP file.
+
+        :return: DIB header of the image.
+        :rtype: DIBHeader
+        """
         if self.__dib_header is not None:
             return self.__dib_header
 
