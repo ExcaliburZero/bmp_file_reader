@@ -156,6 +156,10 @@ class Color:
     A 24bit RGB color value.
     """
 
+    red = 0
+    green = 0
+    blue = 0
+
     def __init__(self, red, green, blue):
         """
         Creates a Color from the given 1 byte red, green, and blue color values.
