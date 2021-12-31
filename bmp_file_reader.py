@@ -60,6 +60,14 @@ class BMPFileReader:
         return self.read_dib_header().height
 
     def get_row(self, row):
+        """
+        Reads in the pixels of the specified row (zero-indexed).
+
+        :param row: The index of the row to read.
+        :type row: int
+        :return: The colors of the pixels in the specified row.
+        :rtype: List[Color]
+        """
         PIXEL_SIZE_BYTES = 3
 
         # Check the file info to make sure we support it
