@@ -296,7 +296,9 @@ class DIBHeader:
 
         header_size = int.from_bytes(file_handler.read(4), "little")
 
-        if header_size > 100000:
+        if header_size <= 0:
+            raise ValueError("BMP header has invalid header size: " + str(header_size))
+        elif header_size > 100000:
             raise ValueError("BMP header looks like it may be too big (header_size=" + str(header_size) + ").")
 
         try:
