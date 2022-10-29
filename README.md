@@ -30,6 +30,8 @@ Some LCD screens are high enough resolution to make them a bit tricky to work wi
 
 If it is indeed only images over a certain size that cause the memory allocation error then you can likely get around it by instead of loading one big image to fill the whole screen, break up the image into multiple smaller files and load them one by one to fill up the screen.
 
+![A diagram showing a 240x320px image of the painting Starry Night being broken up into 12 100x100px tile images in order to make it easier to display on a 240x320px screen.](images/starry_night_tiles.png)
+
 ## Performance
 Last updated: December 30th, 2021
 
