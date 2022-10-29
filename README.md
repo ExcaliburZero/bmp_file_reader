@@ -24,6 +24,11 @@ This library only supports BMP files that use 24-bit color values. In order to g
 
 ![Screenshot showing GIMP's BMP export window with the "Advanced Options" dialog enabled and the 24-bits R8 G8 B8 radio button selected.](images/GIMP_bmp_options.png)
 
+## Frequently asked questions
+### I'm getting a memory allocation error when I try to load an image to fill the whole screen. How can I fix this?
+Some LCD screens are high enough resolution to make them a bit tricky to work with given the Raspberry Pi Pico's very limited RAM. The first thing to try would be to load a smaller image (ex. 10x10px).
+
+If it is indeed only images over a certain size that cause the memory allocation error then you can likely get around it by instead of loading one big image to fill the whole screen, break up the image into multiple smaller files and load them one by one to fill up the screen.
 
 ## Performance
 Last updated: December 30th, 2021
