@@ -110,13 +110,13 @@ class BMPFileReader:
         bits_per_pixel = self.read_dib_header().bits_per_pixel
         if bits_per_pixel != 24:
             raise ValueError(
-                f"This parser does not currently support BMP files with {bits_per_pixel} bits per pixel. Currently only 24-bit color values are supported."
+                "This parser does not currently support BMP files with {} bits per pixel. Currently only 24-bit color values are supported.".format(bits_per_pixel)
             )
 
         compression_type = self.read_dib_header().compression_type
         if compression_type != CompressionType.BI_RGB:
             raise ValueError(
-                f"This parser does not currently support compressed BMP files."
+                "This parser does not currently support compressed BMP files."
             )
 
         # Prepare to start parsing the row
@@ -176,7 +176,7 @@ class Color:
         self.blue = blue
 
     def __repr__(self):
-        return f"Color(red={self.red}, green={self.green}, blue={self.blue})"
+        return "Color(red={}, green={}, blue={})".format(self.red, self.green, self.blue)
 
     def __eq__(self, other):
         if not isinstance(other, Color):
@@ -206,7 +206,9 @@ class BMPHeader:
         self.image_start_offset = image_start_offset
 
     def __repr__(self):
-        return f"BMPHeader(bmp_type={self.bmp_type}, size={self.size}, value_1={self.value_1}, value_2={self.value_2}, image_start_offset={self.image_start_offset})"
+        return "BMPHeader(bmp_type={}, size={}, value_1={}, value_2={}, image_start_offset={})".format(
+            self.bmp_type, self.size, self.value_1, self.value_2, self.image_start_offset
+        )
 
     def __eq__(self, other):
         if not isinstance(other, BMPHeader):
@@ -276,18 +278,29 @@ class DIBHeader:
         )
 
     def __repr__(self):
-        return f"""DIBHeader(
-    width={self.width},
-    height={self.height},
-    num_color_planes={self.num_color_planes},
-    bits_per_pixel={self.bits_per_pixel},
-    compression_type={CompressionType.to_str(self.compression_type)},
-    raw_bitmap_size={self.raw_bitmap_size},
-    horizontal_resolution_ppm={self.horizontal_resolution_ppm},
-    vertical_resolution_ppm={self.vertical_resolution_ppm},
-    num_colors_in_palette={self.num_colors_in_palette},
-    num_important_colors_used={self.num_important_colors_used},
-)"""
+        return """DIBHeader(
+    width={},
+    height={},
+    num_color_planes={},
+    bits_per_pixel={},
+    compression_type={},
+    raw_bitmap_size={},
+    horizontal_resolution_ppm={},
+    vertical_resolution_ppm={},
+    num_colors_in_palette={},
+    num_important_colors_used={},
+)""".format(
+            self.width,
+            self.height,
+            self.num_color_planes,
+            self.bits_per_pixel,
+            CompressionType.to_str(self.compression_type),
+            self.raw_bitmap_size,
+            self.horizontal_resolution_ppm,
+            self.vertical_resolution_ppm,
+            self.num_colors_in_palette,
+            self.num_important_colors_used,
+        )
 
     @staticmethod
     def from_positioned_file_handler(file_handler):
